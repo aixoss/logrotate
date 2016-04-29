@@ -1,7 +1,7 @@
 VERSION = $(shell awk '/Version:/ { print $$2 }' logrotate.spec)
 OS_NAME = $(shell uname -s)
 LFS = $(shell echo `getconf LFS_CFLAGS 2>/dev/null`)
-CFLAGS = -Wall -D_GNU_SOURCE -D$(OS_NAME) -DVERSION=\"$(VERSION)\" $(RPM_OPT_FLAGS) $(LFS)
+CFLAGS = -D_GNU_SOURCE -D$(OS_NAME) -DVERSION=\"$(VERSION)\" $(RPM_OPT_FLAGS) $(LFS)
 PROG = logrotate
 MAN = logrotate.8
 MAN5 = logrotate.conf.5
@@ -28,6 +28,19 @@ TEST_ACL=1
 else
 # See pretest
 TEST_ACL=0
+endif
+
+# AIX using cc
+ifeq ($(OS_NAME),AIX)
+    ifeq ($(RPM_OPT_FLAGS),)
+        RPM_OPT_FLAGS = -O
+    endif
+    CC = /usr/vac/bin/xlc_r
+    CFLAGS += -qcpluscmt -D_LARGE_FILES
+    INSTALL = /opt/freeware/bin/install
+    ifeq ($(BASEDIR),)
+        BASEDIR = /opt/freeware
+    endif
 endif
 
 # HP-UX using GCC
@@ -95,7 +108,7 @@ MANDIR ?= $(BASEDIR)/man
 
 #--------------------------------------------------------------------------
 
-OBJS = logrotate.o log.o config.o basenames.o
+OBJS = logrotate.o log.o config.o basenames.o asprintf.o vasprintf.o
 SOURCES = $(subst .o,.c,$(OBJS) $(LIBOBJS))
 
 ifeq ($(RPM_OPT_FLAGS),)

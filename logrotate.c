@@ -61,6 +61,11 @@ static acl_type prev_acl = NULL;
 extern int asprintf(char **str, const char *fmt, ...);
 #endif
 
+#ifndef O_NOFOLLOW
+#define O_NOFOLLOW 0
+#warning O_NOFOLLOW undeclared - ignoring
+#endif
+
 struct logState {
     char *fn;
     struct tm lastRotated;	/* only tm_hour, tm_mday, tm_mon, tm_year are good! */
