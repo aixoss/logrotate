@@ -28,6 +28,11 @@
 #include "log.h"
 #include "logrotate.h"
 
+#if defined(_AIX)
+#define TAILQ_LAST(head, headname) \
+        (*(((struct headname *)((head)->tqh_last))->tqh_last))
+#endif
+
 #if !defined(GLOB_ABORTED) && defined(GLOB_ABEND)
 #define GLOB_ABORTED GLOB_ABEND
 #endif
