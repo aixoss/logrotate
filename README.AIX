@@ -1,0 +1,20 @@
+Instructions to build & install logrotate on AIX
+------------------------------------------------
+
+1)Export the following variables
+         export CC="xlc" (gcc also can be used)
+         export CFLAGS="-qlanglv=extended"
+         export LDFLAGS="-Wl,-brtl"
+
+2)make
+
+3)make install DESTDIR=/opt/freeware
+
+Instructions to build logrotate 3.8.5 rpm package on AIX
+--------------------------------------------------------
+
+1)Go to https://github.com/aixoss/logrotate/releases/tag/3.8.5
+
+2)Get the patches(if any), spec file & source tarball (tar.gz)
+
+3)Do a "rpm -ba <spec file>
